@@ -93,3 +93,17 @@ Key rules:
 - A streamed usage sample is replaced by the settlement for the same attempt, and a model retry counts as a separate billed attempt.
 - Peak classification uses the settlement event's timestamp, so a request crossing a peak boundary is priced by when it settled.
 - A subagent runs in its own Session with its own log, so its spend appears in that Session's Cost tab, not the parent's total.
+
+## Releasing
+
+Versions publish from GitHub Actions with [npm trusted publishing](https://docs.npmjs.com/trusted-publishers); no npm token is stored in the repository. The package's trusted publisher names this repository and the `publish.yml` workflow file. If it also names an environment, add the same `environment` to the workflow's job.
+
+1. Bump `version` in `package.json` and commit it.
+2. Tag the commit with the same version and push the tag:
+
+   ```sh
+   git tag v1.1.0
+   git push origin main --tags
+   ```
+
+3. The **Publish** workflow installs dependencies, runs the full verification, checks that the tag matches `package.json`, and publishes with provenance. Re-running a tag whose version is already on npm is a no-op.

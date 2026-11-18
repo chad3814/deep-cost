@@ -1,0 +1,87 @@
+name: Publish
+
+# Publishes the tagged version to npm through trusted publishing (OIDC).
+# The npm package's trusted publisher must name this repository and the
+# `publish.yml` workflow file. If it also names an environment, declare the
+# same name on the job below.
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: npm-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Check out the tagged commit
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12.18.0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Check the tag against the package version
+        id: version
+        run: |
+          set -euo pipefail
+          name="$(node -p "require('./package.json').name")"
+          version="$(node -p "require('./package.json').version")"
+          tag="${GITHUB_REF_NAME#v}"
+          if [ "$tag" != "$version" ]; then
+            echo "::error::tag ${GITHUB_REF_NAME} does not match package version ${version}"
+            exit 1
+          fi
+          echo "name=${name}" >> "$GITHUB_OUTPUT"
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify
+        run: pnpm run verify
+
+      - name: Ensure npm supports trusted publishing
+        run: |
+          set -euo pipefail
+          npm install --global "npm@^11.5.1"
+          npm --version
+
+      - name: Publish with provenance
+        id: publish
+        env:
+          NPM_CONFIG_PROVENANCE: 'true'
+          PACKAGE_NAME: ${{ steps.version.outputs.name }}
+          PACKAGE_VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          if npm view "${PACKAGE_NAME}@${PACKAGE_VERSION}" version >/dev/null 2>&1; then
+            echo "::notice::${PACKAGE_NAME}@${PACKAGE_VERSION} is already published; nothing to do."
+            echo "published=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          npm publish --provenance --access public --ignore-scripts
+          echo "published=true" >> "$GITHUB_OUTPUT"
+
+      - name: Write the run summary
+        if: steps.publish.outputs.published == 'true'
+        run: |
+          echo "Published \`${{ steps.version.outputs.name }}@${{ steps.version.outputs.version }}\` to npm with provenance from \`${{ github.ref_name }}\`." >> "$GITHUB_STEP_SUMMARY"
