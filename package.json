@@ -1,6 +1,6 @@
 {
   "name": "@chad3814/dsh-deep-cost",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Running conversation cost estimate for DeepSeek Harness",
   "keywords": [
     "dsh",
