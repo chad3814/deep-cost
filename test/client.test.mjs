@@ -23,7 +23,7 @@ async function loadClient() {
   let definition
   const fakeWindow = { __ModuleLoader__: { load(value) { definition = value } } }
   new Function('window', source)(fakeWindow)
-  assert.equal(definition.id, '@local/deep-cost')
+  assert.equal(definition.id, '@chad3814/dsh-deep-cost')
 
   const createElement = (type, props, ...children) => ({
     type,

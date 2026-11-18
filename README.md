@@ -6,6 +6,28 @@ A compact live total also sits in the Session header beside the title, so the ru
 
 The figure is folded from the durable Session log, so it covers the whole conversation and survives reloads, paging, and compaction. Subagent sessions are separate Sessions and are not rolled into this total. It updates when each model call settles. Model token cost only: web search, fetch, file parsing, and speech fees are not included, and the total is an estimate from provider-reported usage, not a bill.
 
+## Install
+
+Published on npm as [`@chad3814/dsh-deep-cost`](https://www.npmjs.com/package/@chad3814/dsh-deep-cost). In the Web GUI, open **Plugins → Add plugin** and enter the package name:
+
+```text
+@chad3814/dsh-deep-cost
+```
+
+For a CLI-managed profile:
+
+```sh
+dsh plugin --profile <profile> add @chad3814/dsh-deep-cost
+```
+
+Or install straight from the repository (no build step is needed):
+
+```sh
+dsh plugin --profile <profile> add github:chad3814/deep-cost
+```
+
+The Desktop profile is managed from its **Plugins** page rather than the CLI. Enabling the bundle adds the Cost tab and the header total; turning it off removes both and the `deepCost` projection.
+
 ## Pricing
 
 Built-in rates are the published DeepSeek rates in USD per 1M tokens. Off-peak rates are half the peak rates, and peak hours are 01:00–04:00 and 06:00–10:00 UTC, Monday through Friday.
@@ -25,7 +47,7 @@ Override the plugin row in the profile's `cordis.patch.yml`:
 
 ```yaml
 - id: deep-cost
-  name: '@local/deep-cost'
+  name: '@chad3814/dsh-deep-cost'
   config:
     peakMode: auto            # auto | peak | offPeak
     currency: USD

@@ -1,15 +1,39 @@
 {
-  "name": "@local/deep-cost",
+  "name": "@chad3814/dsh-deep-cost",
   "version": "1.0.0",
-  "private": true,
-  "type": "module",
   "description": "Running conversation cost estimate for DeepSeek Harness",
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "plugin",
+    "cost",
+    "spend",
+    "usage",
+    "tokens",
+    "deepseek"
+  ],
+  "homepage": "https://github.com/chad3814/deep-cost#readme",
+  "bugs": {
+    "url": "https://github.com/chad3814/deep-cost/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chad3814/deep-cost.git"
+  },
+  "author": "Chad Walker <chad@cwalker.dev> (https://github.com/chad3814)",
+  "license": "MIT",
+  "type": "module",
+  "main": "index.js",
+  "engines": {
+    "dsh": ">=0.2.2-rc.3 <0.3.0"
+  },
   "scripts": {
     "check": "node --check index.js && node --check client.js",
     "lint": "eslint .",
     "typecheck": "tsc -p tsconfig.json",
     "test": "node --test",
-    "verify": "npm run check && npm run lint && npm run typecheck && npm test && pnpm pack --dry-run"
+    "verify": "npm run check && npm run lint && npm run typecheck && npm test && pnpm pack --dry-run",
+    "prepublishOnly": "npm run verify"
   },
   "exports": {
     ".": "./index.js",
@@ -37,6 +61,9 @@
         "@deepseek-ai/dsh-client-ui-conversation"
       ]
     }
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

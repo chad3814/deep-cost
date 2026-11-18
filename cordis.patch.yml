@@ -2,4 +2,4 @@
 # through the package's dsh.client manifest.
 - insert:
     - id: deep-cost
-      name: '@local/deep-cost'
+      name: '@chad3814/dsh-deep-cost'
