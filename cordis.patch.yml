@@ -1,0 +1,5 @@
+# Registers the Host cost projection; the Cost view ships in the same bundle
+# through the package's dsh.client manifest.
+- insert:
+    - id: deep-cost
+      name: '@local/deep-cost'

@@ -1,0 +1,47 @@
+{
+  "name": "@local/deep-cost",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Running conversation cost estimate for DeepSeek Harness",
+  "scripts": {
+    "check": "node --check index.js && node --check client.js",
+    "lint": "eslint .",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "node --test",
+    "verify": "npm run check && npm run lint && npm run typecheck && npm test && pnpm pack --dry-run"
+  },
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "README.md"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-conversation"
+      ]
+    }
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^9.39.5",
+    "globals": "^17.14.0",
+    "typescript": "^7.0.2"
+  }
+}

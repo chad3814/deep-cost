@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Conversation cost",
+    "description": "Adds a Cost view beside Chat and Trajectory with the session's running model spend, per-model token breakdown, and cache hit rate. The total is folded from the durable session log, so it survives reloads and paging. Built-in prices cover deepseek-flash and deepseek-v4-pro at published peak and off-peak rates; configure prices for other models, which stay unpriced and excluded otherwise. It estimates model token cost only and excludes web search, fetch, file parsing, and speech fees. A compact live total also appears in the Session header while another view is open."
+  }
+}
